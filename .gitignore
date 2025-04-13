@@ -1,0 +1,6 @@
+*.bat
+.idea
+*.pyc
+tests
+telethon_helper.egg-info
+._*
