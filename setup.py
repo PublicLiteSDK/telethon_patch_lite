@@ -4,7 +4,7 @@ import pkg_resources
 import sys
 
 setup(
-    name='telethon_patch_lite',
+    name='telethon_patch',
     packages=find_packages(exclude=['tests']),
     version='0.1.0',
     description='Lite Patch for Telethon',
