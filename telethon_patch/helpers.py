@@ -56,9 +56,7 @@ def extract_date_from_text_by_re(
     match = re.search(date_pattern, text)
     if match:
         day, month, year = map(int, match.groups())
-        date = datetime.datetime(year, month, day, tzinfo=datetime.UTC)
-
-    return date
+        return datetime.datetime(year, month, day, tzinfo=datetime.UTC)
 
 
 def extract_date_from_text(text) -> Optional[datetime.datetime]:

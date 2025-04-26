@@ -172,13 +172,13 @@ class ClientMethods:
                 if isinstance(invite_type, ChatInviteAlready):
                     return invite_type.chat
 
-                if any(
-                        retry == 1,
-                        (
-                                isinstance(invite_type, ChatInvite)
-                                and invite_requests_enabled is False
-                        )
-                ):
+                if any([
+                    retry == 1,
+                    (
+                            isinstance(invite_type, ChatInvite)
+                            and invite_requests_enabled is False
+                    )
+                ]):
                     return False
 
                 return (await self(ImportChatInviteRequest(link))).chats[0]

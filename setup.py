@@ -18,5 +18,7 @@ setup(
         'aiofile',
         'pydantic',
         'python_socks[asyncio]',
+        'python-dateutil'
+
     ],
 )
