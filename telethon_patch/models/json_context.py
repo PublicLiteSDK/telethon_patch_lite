@@ -63,7 +63,13 @@ class JsonContent(BaseModel):
     proxy: Optional[Union[str, list]] = None
     ipv6: Optional[bool] = None
 
-    time: Optional[float] = None
+    time: Optional[str] = None
+
+    extra_params: Optional[str] = None
+    freeze_integrity: Optional[str] = None
+    freeze_appeal_url: Optional[str] = None
+    freeze_until: Optional[str] = None
+    freeze_since: Optional[str] = None
 
 
 class JsonContext:
