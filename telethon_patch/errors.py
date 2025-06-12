@@ -1,0 +1,2 @@
+class CheckSpambotError(Exception):
+    pass

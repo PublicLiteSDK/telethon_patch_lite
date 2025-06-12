@@ -28,13 +28,13 @@ class FilesMethods:
 
     @staticmethod
     def _ensure_dir(path: str):
-        print([path])
+        # print([path])
 
-        dir_name = os.path.dirname(path)
-        print([path, dir_name])
+        # dir_name = os.path.dirname(path)
+        # print([path, dir_name])
 
         if not os.path.exists(path):
-            print([path])
+            # print([path])
             os.makedirs(path, exist_ok=True)
 
     def _get_path(self: "TelegramClient", index: int) -> typing.Optional[str]:
@@ -56,7 +56,7 @@ class FilesMethods:
             method: FileHandlerTypes = None,
             new_dir: str = None
     ) -> str:
-        print([new_dir])
+        # print([new_dir])
 
         if method in {FileHandlerTypes.MOVE, FileHandlerTypes.COPY}:
             if new_dir is None:
@@ -81,7 +81,7 @@ class FilesMethods:
                     new_path = os.path.join(new_dir, os.path.basename(path))
                     if os.path.exists(new_path):
                         os.remove(new_path)
-                    print([index, path, new_path])
+                    # print([index, path, new_path])
                     os.rename(path, new_path)
                     self._set_path(index, new_path)
 

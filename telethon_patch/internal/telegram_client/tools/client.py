@@ -25,6 +25,7 @@ from telethon.tl.types import User, Authorization, CodeSettings, MessageEntityTe
 from telethon.client.telegrambaseclient import TelegramBaseClient
 from telethon import client
 import dateutil.parser
+from telethon_patch.errors import CheckSpambotError
 
 if typing.TYPE_CHECKING:
     from telethon_patch import TelegramClient
@@ -79,7 +80,12 @@ class ClientMethods:
         self.me = await client.UserMethods.get_me(self)
         return self.me
 
-    async def check_spambot(self: "TelegramClient", delete_dialog: bool = True) -> datetime.datetime:
+    async def check_spambot(
+            self: "TelegramClient",
+            delete_dialog: bool = True,
+            safe_error: bool = True
+    ) -> typing.Union[bool, datetime.datetime]:
+
         message = None
         async with self.conversation("@spambot") as conv:
             for _ in range(2):
@@ -96,18 +102,26 @@ class ClientMethods:
                 await self.delete_dialog("@spambot")
 
         if message is None:
-            return datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=7)
+            _error = CheckSpambotError("Message not found")
+            if not safe_error:
+                raise _error
 
-        have_url = any([isinstance(_, MessageEntityTextUrl) for _ in message.entities or []])
-        if message.reply_markup and len(message.reply_markup.rows) == 2 and have_url is False:
-            return None
+            return _error
 
-        date = helpers.extract_date_from_text()
-        if date is None:
-            return datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=30 * 6)
+        if (
+                message.reply_markup and
+                len(message.reply_markup.rows) == 2 and
+                any([isinstance(_, MessageEntityTextUrl) for _ in message.entities or []]) is False
+        ):
+            return True
 
-        if datetime.datetime.now(datetime.UTC) > date:
-            return None
+        date = helpers.extract_date_from_text(message.text)
+
+        if date is None:  # вечный
+            return False
+
+        if datetime.datetime.now(datetime.UTC) > date:  # прошел
+            return True
 
         return date
 
