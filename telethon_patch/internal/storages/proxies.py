@@ -180,7 +180,7 @@ class ProxyStorage(metaclass=Singleton):
                     await fetch_task(self)
 
                 except Exception as exc:
-                    logger.error("Error while loading proxies ({}: {})", exc.__class__.__name__, exc)
+                    logger.debug("Error while loading proxies ({}: {})", exc.__class__.__name__, exc)
 
                 await asyncio.sleep(interval)
 
