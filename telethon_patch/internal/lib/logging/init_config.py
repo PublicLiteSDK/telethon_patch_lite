@@ -5,12 +5,13 @@ _format = "<level>[{time:YYYY-MM-DD HH:mm:ss}] || {message}</level>"
 
 level_colors = {
     "DEBUG": "dim",
-    "INFO": "gray",
+    "INFO": "white",
     "SUCCESS": "green",
     "WARNING": "yellow",
     "ERROR": "red",
     "CRITICAL": "red on white"
 }
+
 
 
 def format_record(record):
