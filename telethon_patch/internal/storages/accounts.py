@@ -54,13 +54,17 @@ class AccountsStorage(metaclass=_SingletonMeta):
                     self._clients[client] = filename
 
                 except Exception as exc:
-                    if self.uncorrect_format_dir_path:
-                        os.rename(data["session_file"], self.uncorrect_format_dir_path + filename + ".session")
-                        os.rename(data["json_file"], self.uncorrect_format_dir_path + filename + ".json")
-
                     logger.debug(
                         "Error while initializing client {} ({}: {})".format(filename, exc.__class__.__name__, exc)
                     )
+                    if self.uncorrect_format_dir_path:
+                        os.makedirs(self.uncorrect_format_dir_path, exist_ok=True)
+                        for file in (data["session_file"], data["json_file"]):
+                            if os.path.exists(file):
+                                os.rename(
+                                    file,
+                                    os.path.join(self.uncorrect_format_dir_path, filename + os.path.splitext(file)[1])
+                                )
 
     async def _loader(self, interval: int = 60):
         async with self._semaphore:
