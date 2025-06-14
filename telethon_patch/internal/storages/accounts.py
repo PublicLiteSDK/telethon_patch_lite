@@ -1,4 +1,5 @@
 import asyncio
+import os
 import random
 import time
 import traceback
@@ -16,8 +17,9 @@ class AccountsStorage(metaclass=_SingletonMeta):
     _clients: dict[TelegramClient, str]
     _semaphore: asyncio.Semaphore
 
-    def __init__(self, input_dir_path: str):
+    def __init__(self, input_dir_path: str, uncorrect_format_dir_path: Optional[str] = None):
         self.input_dir_path = input_dir_path
+        self.uncorrect_format_dir_path = uncorrect_format_dir_path
         self._hold_until_at = dict()
         self._clients = dict()
         self._semaphore = asyncio.Semaphore()
@@ -52,7 +54,11 @@ class AccountsStorage(metaclass=_SingletonMeta):
                     self._clients[client] = filename
 
                 except Exception as exc:
-                    logger.error(
+                    if self.uncorrect_format_dir_path:
+                        os.rename(data["session_file"], self.uncorrect_format_dir_path + filename + ".session")
+                        os.rename(data["json_file"], self.uncorrect_format_dir_path + filename + ".json")
+
+                    logger.debug(
                         "Error while initializing client {} ({}: {})".format(filename, exc.__class__.__name__, exc)
                     )
 
@@ -68,7 +74,7 @@ class AccountsStorage(metaclass=_SingletonMeta):
                 await self._load()
 
             except Exception as exc:
-                logger.error("Error while loading accounts ({}: {})", exc.__class__.__name__, str(exc))
+                logger.debug("Error while loading accounts ({}: {})", exc.__class__.__name__, str(exc))
                 traceback.print_exc()
 
             await asyncio.sleep(interval)
