@@ -88,7 +88,10 @@ class FilesMethods:
                     self._set_path(index, new_path)
 
                 case FileHandlerTypes.RENAME:
-                    new_path = os.path.join(os.path.dirname(path), rename_value + path.split('.')[-1])
+                    new_path = os.path.join(
+                        os.path.dirname(path),
+                        "{}.{}".format(rename_value, path.split('.')[-1])
+                    )
                     if os.path.exists(new_path):
                         os.remove(new_path)
                     os.rename(path, new_path)
