@@ -5,7 +5,7 @@ _format = "<level>[{time:YYYY-MM-DD HH:mm:ss}] || {message}</level>"
 
 level_colors = {
     "DEBUG": "dim",
-    "INFO": "white",
+    "INFO": "bright_white",
     "SUCCESS": "green",
     "WARNING": "yellow",
     "ERROR": "red",
@@ -24,5 +24,3 @@ def init_logging_config(level="INFO", logging_path="logs/main.log"):
     logger.add(logging_path, level=level, rotation="1 MB", compression="zip",
                format="[{time:YYYY-MM-DD HH:mm:ss}] || {message}")
     logger.add(sys.stderr, level=level, format=format_record)
-
-    logger.success("Logger initialized")
