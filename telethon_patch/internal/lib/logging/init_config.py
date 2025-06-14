@@ -4,12 +4,12 @@ from . import logger
 _format = "<level>[{time:YYYY-MM-DD HH:mm:ss}] || {message}</level>"
 
 level_colors = {
-    "DEBUG": "white",
-    "INFO": "cyan",
-    "SUCCESS": "blue",
+    "DEBUG": "dim",
+    "INFO": "gray",
+    "SUCCESS": "green",
     "WARNING": "yellow",
     "ERROR": "red",
-    "CRITICAL": "bright_red"
+    "CRITICAL": "red on white"
 }
 
 
