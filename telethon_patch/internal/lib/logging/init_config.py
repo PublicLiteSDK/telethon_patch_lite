@@ -20,7 +20,7 @@ def format_record(record):
     message = record["message"]
 
     if level == "INFO":
-        return f"{ANSI_BRIGHT_WHITE}[{timestamp}] || {message}{ANSI_RESET}\n"
+        return f"<white>[{timestamp}] ||</white> {ANSI_BRIGHT_WHITE}{message}{ANSI_RESET}\n"
 
     color = level_colors.get(level, "white")
     return f"<white>[{timestamp}] ||</white> <{color}>{message}</{color}>\n"
@@ -31,5 +31,3 @@ def init_logging_config(level="INFO", logging_path="logs/main.log"):
     logger.add(logging_path, level=level, rotation="1 MB", compression="zip",
                format="[{time:YYYY-MM-DD HH:mm:ss}] || {message}")
     logger.add(sys.stderr, level=level, format=format_record)
-
-    logger.success("Logger initialized")
