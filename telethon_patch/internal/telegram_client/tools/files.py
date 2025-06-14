@@ -18,6 +18,7 @@ class FileHandlerTypes(enum.Enum):
     REMOVE = enum.auto()
     MOVE = enum.auto()
     COPY = enum.auto()
+    RENAME = enum.auto()
 
 
 class FilesMethods:
@@ -54,7 +55,8 @@ class FilesMethods:
             self: "TelegramClient",
             file_indexes: list[bool],
             method: FileHandlerTypes = None,
-            new_dir: str = None
+            new_dir: str = None,
+            rename_value: str = None
     ) -> str:
         # print([new_dir])
 
@@ -85,6 +87,13 @@ class FilesMethods:
                     os.rename(path, new_path)
                     self._set_path(index, new_path)
 
+                case FileHandlerTypes.RENAME:
+                    new_path = os.path.join(os.path.dirname(path), rename_value + path.split('.')[-1])
+                    if os.path.exists(new_path):
+                        os.remove(new_path)
+                    os.rename(path, new_path)
+                    self._set_path(index, new_path)
+
                 case FileHandlerTypes.COPY:
                     new_path = os.path.join(new_dir, os.path.basename(path))
                     if os.path.exists(new_path):
@@ -104,3 +113,6 @@ class FilesMethods:
 
     async def remove(self: "TelegramClient", del_session: bool = True, del_json: bool = True) -> bool:
         return self._file_handler([del_session, del_json], FileHandlerTypes.REMOVE)
+
+    async def rename(self: "TelegramClient", new_file_name: str) -> bool:
+        return self._file_handler([True, True], FileHandlerTypes.RENAME, rename_value=new_file_name)
