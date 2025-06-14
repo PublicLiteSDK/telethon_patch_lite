@@ -13,11 +13,10 @@ level_colors = {
 }
 
 
-
 def format_record(record):
     level = record["level"].name
     color = level_colors.get(level, "white")
-    return f"<{color}>[{record['time']:%Y-%m-%d %H:%M:%S}] || {record['message']}</{color}>\n"
+    return f"<white>[{record['time']:%Y-%m-%d %H:%M:%S}] ||</white> <{color}>{record['message']}</{color}>\n"
 
 
 def init_logging_config(level="INFO", logging_path="logs/main.log"):
