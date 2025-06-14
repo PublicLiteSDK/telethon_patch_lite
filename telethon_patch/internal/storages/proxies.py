@@ -8,16 +8,13 @@ from typing import Union, Literal
 import python_socks
 from aiofile import async_open
 from simple_singleton import Singleton
-from telethon_patch import helpers
+from telethon_patch import helpers, logger
+from telethon_patch.errors import ProxyError
 
 PROXY_TYPES = dict(
     http=python_socks.ProxyType.HTTP,
     socks=python_socks.ProxyType.SOCKS5
 )
-
-
-class ProxyError(Exception):
-    pass
 
 
 class Proxy:
@@ -111,6 +108,7 @@ class ProxyStorage(metaclass=Singleton):
                     self._proxies[item] = proxy_item
 
             except:
+                logger.error(f'The proxy {item} is not correct')
                 traceback.print_exc()
 
     @property
@@ -173,21 +171,18 @@ class ProxyStorage(metaclass=Singleton):
     async def file_load(self, filename: str) -> None:
         await helpers.run_sync(self.sync_file_load, filename)
 
-    async def run_refetcher(self, load_task: callable, interval: int = 60) -> None:
-        if not load_task:
+    async def run_fetcher(self, fetch_task: callable, interval: int = 60) -> None:
+        if not isinstance(fetch_task, callable):
             raise ProxyError('The load_task is not correct')
 
-        async def wrap_load_task():
+        async def wrap_fetch_task():
             while True:
                 try:
-                    await load_task(self)
+                    await fetch_task(self)
 
                 except Exception as exc:
-                    traceback.print_exc()
+                    logger.error("Error while loading proxies ({}: {})", exc.__class__.__name__, exc)
 
                 await asyncio.sleep(interval)
 
-        asyncio.create_task(wrap_load_task())
-
-
-proxy_storage = ProxyStorage()
+        asyncio.create_task(wrap_fetch_task())

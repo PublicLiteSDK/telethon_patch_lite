@@ -5,7 +5,8 @@ import os
 import typing
 from urllib.parse import urlparse, parse_qs
 
-from telethon.errors import HashInvalidError, SessionPasswordNeededError, YouBlockedUserError, InviteRequestSentError
+from telethon.errors import HashInvalidError, SessionPasswordNeededError, YouBlockedUserError, InviteRequestSentError, \
+    FrozenMethodInvalidError
 from telethon.tl.functions.account import GetAuthorizationsRequest, ResetAuthorizationRequest
 from telethon.tl.functions.auth import AcceptLoginTokenRequest, SendCodeRequest, ImportWebTokenAuthorizationRequest
 from telethon.tl.functions.channels import JoinChannelRequest, InviteToChannelRequest
@@ -83,7 +84,8 @@ class ClientMethods:
     async def check_spambot(
             self: "TelegramClient",
             delete_dialog: bool = True,
-            safe_error: bool = True
+            safe_error: bool = True,
+            raise_frozen: bool = True
     ) -> typing.Union[bool, datetime.datetime]:
 
         message = None
@@ -98,8 +100,13 @@ class ClientMethods:
                     await self(UnblockRequest(id="@spambot"))
 
         if delete_dialog:
-            with contextlib.suppress(Exception):
+
+            try:
                 await self.delete_dialog("@spambot")
+
+            except Exception as exc:
+                if raise_frozen and isinstance(exc, FrozenMethodInvalidError):
+                    raise exc
 
         if message is None:
             _error = CheckSpambotError("Message not found")
