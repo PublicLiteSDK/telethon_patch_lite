@@ -1,32 +1,22 @@
 import asyncio
 import contextlib
 import datetime
-import os
 import typing
-from urllib.parse import urlparse, parse_qs
 
-from telethon.errors import HashInvalidError, SessionPasswordNeededError, YouBlockedUserError, InviteRequestSentError, \
+from telethon.errors import HashInvalidError, YouBlockedUserError, InviteRequestSentError, \
     FrozenMethodInvalidError
 from telethon.tl.functions.account import GetAuthorizationsRequest, ResetAuthorizationRequest
-from telethon.tl.functions.auth import AcceptLoginTokenRequest, SendCodeRequest, ImportWebTokenAuthorizationRequest
-from telethon.tl.functions.channels import JoinChannelRequest, InviteToChannelRequest
+from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.functions.help import GetPremiumPromoRequest
-from telethon.tl.functions.messages import AcceptUrlAuthRequest, CheckChatInviteRequest, ImportChatInviteRequest
+from telethon.tl.functions.messages import CheckChatInviteRequest, ImportChatInviteRequest
 from telethon.tl.functions.payments import GetStarsStatusRequest
 
-from telethon_patch.models.tgdc import TGDC
-
-from telethon_patch.models.init_context import InitContext
-
-from telethon_patch import helpers
-from telethon.sessions import SQLiteSession, StringSession
-from telethon.tl.types import User, Authorization, CodeSettings, MessageEntityTextUrl, InputPeerSelf, ChatInviteAlready, \
-    TypeChat, ChatInvite, InputPeerUser
-from telethon.client.telegrambaseclient import TelegramBaseClient
+from telethon_patch.lib import helpers
+from telethon.tl.types import User, Authorization, MessageEntityTextUrl, InputPeerSelf, ChatInviteAlready, \
+    TypeChat, ChatInvite
 from telethon import client
-import dateutil.parser
-from telethon_patch.errors import CheckSpambotError
+from telethon_patch.lib.errors import CheckSpambotError
 
 if typing.TYPE_CHECKING:
     from telethon_patch import TelegramClient

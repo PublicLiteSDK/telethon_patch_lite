@@ -1,4 +1,4 @@
-from telethon_patch.internal.lib.logging import logger, init_logging_config
+from telethon_patch.lib.logging import init_logging_config, logger
 
 init_logging_config()
 

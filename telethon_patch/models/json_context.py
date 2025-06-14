@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
-from telethon_patch import helpers
+from telethon_patch.lib import helpers
 
 
 class JsonContent(BaseModel):

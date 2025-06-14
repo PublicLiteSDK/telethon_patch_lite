@@ -1,10 +1,8 @@
-import os
 from typing import Optional, Union
 
-from pydantic import BaseModel
-from telethon.sessions import StringSession, SQLiteSession, MemorySession
+from telethon.sessions import StringSession, SQLiteSession
 
-from telethon_patch import helpers
+from telethon_patch.lib import helpers
 
 
 class SessionContext:

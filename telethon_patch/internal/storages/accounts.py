@@ -5,7 +5,8 @@ import traceback
 from typing import Optional
 
 from simple_singleton import _SingletonMeta
-from telethon_patch import helpers, TelegramClient, JsonContext, logger
+from telethon_patch import TelegramClient, JsonContext, logger
+from telethon_patch.lib import helpers
 
 
 class AccountsStorage(metaclass=_SingletonMeta):

@@ -1,15 +1,14 @@
 import asyncio
-import os
 import random
 import time
 import traceback
 from typing import Union, Literal
 
 import python_socks
-from aiofile import async_open
 from simple_singleton import Singleton
-from telethon_patch import helpers, logger
-from telethon_patch.errors import ProxyError
+from telethon_patch import logger
+from telethon_patch.lib import helpers
+from telethon_patch.lib.errors import ProxyError
 
 PROXY_TYPES = dict(
     http=python_socks.ProxyType.HTTP,
